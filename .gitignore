@@ -1,0 +1,12 @@
+
+aws_dbt/.DS_Store
+aws_dbt/src/infra_tf/terraform.tfstate
+aws_dbt/src/infra_tf/terraform.tfstate.backup
+aws_dbt/src/infra_tf/.terraform/terraform.tfstate
+aws_dbt/src/infra_tf/.terraform/providers/registry.terraform.io/hashicorp/aws/5.46.0/darwin_arm64/terraform-provider-aws_v5.46.0_x5
+aws_dbt/src/infra_tf/.terraform.lock.hcl
+aws_dbt/src/kafka/dbt_venv/bin/activate
+aws_dbt/src/kafka/dbt_venv/
+aws_dbt/src/logs/dbt.log
+aws_dbt/venv/
+.gitignore.bak

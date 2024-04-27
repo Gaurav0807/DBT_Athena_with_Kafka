@@ -1,0 +1,11 @@
+kafka-python
+faker
+pandas
+openpyxl
+psycopg2-binary 
+pyspark
+requests
+boto3
+dbt-core
+dbt-core==1.7.10
+dbt-athena-community==1.7.2
