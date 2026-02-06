@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: crypto_stage
+    description: Staged cryptocurrency data with transformations and validations
+    columns:
+      - name: id
+        description: Unique identifier for the record
+        data_tests:
+          - not_null
+          - unique
+      - name: symbol
+        description: Cryptocurrency symbol
+        data_tests:
+          - not_null
+          - not_empty_string  # Generic test for empty strings
+          - accepted_values:
+              values: ['BTC', 'ETH', 'XRP', 'LTC', 'ADA']
+      - name: name
+        description: Cryptocurrency name
+        data_tests:
+          - not_null
+          - not_empty_string  # Generic test for empty strings
+      - name: price
+        description: Cryptocurrency price
+        data_tests:
+          - not_null
+          - price_in_range:  # Generic test with parameters
+              min_value: 0
+              max_value: 1000000
+      - name: date_and_time
+        description: Timestamp of the data
+        data_tests:
+          - not_null
+          - recency_check:  # Generic test to detect stale data
+              days_old: 3

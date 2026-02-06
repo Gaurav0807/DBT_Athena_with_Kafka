@@ -7,8 +7,10 @@ This repository contains scripts for setting up a basic Apache Kafka environment
 ## Prerequisites
 
 - Docker installed on your machine.
-- Python 3.8 installed.
+- Python 3.13 installed.
 - Setup Dbt.
+- python3.13 -m venv venv_py313
+- source venv_py313/bin/activate
 
 ## Kafka Setup
 
