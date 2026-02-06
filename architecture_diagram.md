@@ -125,30 +125,6 @@
 │                                                                       │
 └──────────────────────────────────────────────────────────────────────┘
 
-┌──────────────────────────────────────────────────────────────────────┐
-│              PERFORMANCE MONITORING (CloudWatch)                     │
-├──────────────────────────────────────────────────────────────────────┤
-│                                                                       │
-│  📊 CONSUMER METRICS (from enhanced Kafka consumer):                 │
-│  ├─ Messages Consumed       (Count of processed messages)            │
-│  ├─ Batches Uploaded        (Number of successful S3 uploads)        │
-│  ├─ Upload Errors           (Failed upload attempts)                 │
-│  ├─ Throughput              (messages/second)                        │
-│  └─ Upload Duration         (seconds per batch)                      │
-│                                                                       │
-│  📊 PIPELINE METRICS (from data_quality_monitor.py):                │
-│  ├─ Kafka Consumer Lag      (Messages pending in topic)              │
-│  ├─ S3 Objects (last hour)  (Ingestion rate)                         │
-│  ├─ Batch Size              (Records per upload)                     │
-│  └─ Publish Frequency       (Every 5 minutes)                        │
-│                                                                       │
-│  📊 CLOUDWATCH DASHBOARD:                                            │
-│  ├─ Real-time graphs        (Updated every 5 minutes)                │
-│  ├─ Alert thresholds        (Configurable per metric)                │
-│  ├─ Trend analysis          (Historical performance)                 │
-│  └─ Create: monitoring/create_dashboard.sh                           │
-│                                                                       │
-└──────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │                  LOGGING & ALERTING                                  │
@@ -173,75 +149,6 @@
 └──────────────────────────────────────────────────────────────────────┘
 ```
 
-## Project File Structure
-
-```
-project/
-├── kafka/                                    ← Kafka Layer
-│   ├── producer.py                          (Sends data to Kafka)
-│   ├── consumer.py                          (Enhanced with metrics)
-│   └── requirements.txt
-│
-├── aws_dbt/src/kafka_athena_dbt/            ← DBT Project
-│   ├── dbt_project.yml                      (Project config)
-│   ├── profiles.yml                         (Athena connection)
-│   │
-│   ├── models/
-│   │   ├── bronze/                          (Raw data)
-│   │   │   ├── crypto_raw.sql               (From Athena)
-│   │   │   └── schema.yml                   (Tests + metadata)
-│   │   │
-│   │   ├── silver/                          (Cleaned/staged)
-│   │   │   ├── crypto_stage.sql             (Transformations)
-│   │   │   └── schema.yml                   (Tests + metadata)
-│   │   │
-│   │   ├── gold/                            (Analytics ready)
-│   │   │   ├── crypto_curated.sql           (Business metrics)
-│   │   │   └── schema.yml                   (Tests + metadata)
-│   │   │
-│   │   └── example/
-│   │       ├── my_first_dbt_model.sql
-│   │       ├── my_second_dbt_model.sql
-│   │       └── schema.yml
-│   │
-│   ├── tests/
-│   │   ├── generic/                         (Reusable tests)
-│   │   │   ├── not_empty_string.sql
-│   │   │   ├── price_in_range.sql
-│   │   │   └── recency_check.sql
-│   │   │
-│   │   └── specific/                        (Model-specific tests)
-│   │       └── no_duplicate_ids.sql
-│   │
-│   ├── macros/                              (Reusable functions)
-│   │   ├── generate_alias_schema.sql
-│   │   ├── data_quality_check.sql
-│   │   └── surrogate_key.sql
-│   │
-│   ├── seeds/                               (Static CSV data)
-│   ├── snapshots/                           (SCD Type 2)
-│   ├── analyses/                            (Ad-hoc queries)
-│   └── target/                              (Generated files)
-│
-├── monitoring/                              ← Monitoring Layer
-│   ├── data_quality_monitor.py              (Kafka lag + S3 tracking)
-│   ├── create_dashboard.sh                  (CloudWatch setup)
-│   ├── requirements.txt                     (Dependencies)
-│   └── README.md                            (Detailed guide)
-│
-├── docker-compose.yml                       ← Docker setup
-├── Dockerfile
-├── requirements.txt                         ← Python dependencies
-│
-└── Documentation/
-    ├── Readme.md                            (Original project README)
-    ├── HOW_TO_RUN_TESTS.md                  (Test execution guide)
-    ├── DBT_TEST_COMMANDS.md                 (Command reference)
-    ├── ARCHITECTURE_DIAGRAM.md              (This file)
-    ├── IMPLEMENTATION_COMPLETE.md           (Feature summary)
-    ├── QUICK_START_MONITORING.md            (Quick setup)
-    └── DATA_QUALITY_SETUP.md                (Detailed setup)
-```
 
 ## Data Flow with Layer Details
 
@@ -287,51 +194,7 @@ ANALYTICS & BI
     └─ Dashboards, reports, insights
 ```
 
-## Key Features
 
-✅ **End-to-End Monitoring**: Kafka lag, S3 ingestion, dbt tests  
-✅ **27+ Data Quality Tests**: Built-in + custom generic tests  
-✅ **Structured Logging**: All metrics timestamped and JSON-compatible  
-✅ **CloudWatch Integration**: Real-time metrics & dashboards  
-✅ **Error Handling**: Batching with retry logic, graceful degradation  
-✅ **Scalable Architecture**: Handles high-volume Kafka streams  
-✅ **Complete Documentation**: Setup guides, troubleshooting, examples  
-
----
-
-**Last Updated**: February 6, 2026  
-**Status**: ✅ Production Ready
-
-│  └─ S3 Objects (last hour) (ingestion rate)                 │
-│                                                               │
-│  VISUALIZATION:                                              │
-│  └─ CloudWatch Dashboard   (Real-time graphs + alarms)      │
-│                                                               │
-└──────────────────────────────────────────────────────────────┘
-
-┌──────────────────────────────────────────────────────────────┐
-│                    LOGGING & ALERTS                          │
-├──────────────────────────────────────────────────────────────┤
-│                                                               │
-│  Consumer Logs:                                              │
-│  ├─ Timestamp: 2026-02-06 10:15:30                         │
-│  ├─ Level: INFO/WARNING/ERROR                              │
-│  ├─ Message: Progress update or error                      │
-│  └─ Statistics on shutdown                                  │
-│                                                               │
-│  Monitoring Logs:                                            │
-│  ├─ Kafka lag calculation                                   │
-│  ├─ S3 object count                                         │
-│  └─ CloudWatch publish status                               │
-│                                                               │
-│  Alert Thresholds (Configurable):                           │
-│  ├─ Kafka Lag > 1000 messages                              │
-│  ├─ Upload Errors > 5                                       │
-│  ├─ Data staleness > 2 hours                                │
-│  └─ Throughput < baseline                                   │
-│                                                               │
-└──────────────────────────────────────────────────────────────┘
-```
 
 ## Deployment Architecture
 
