@@ -165,7 +165,7 @@ if __name__ == "__main__":
 
     bootstrap_servers = "localhost:9092"
     kafka_topic = "selected_crypto_data"
-    s3_bucket_name = "gaurav-hudi-data"
+    s3_bucket_name = "data-crypto"
     s3_folder_name = "crypto_data"
 
     consumer = CryptoDataConsumer(

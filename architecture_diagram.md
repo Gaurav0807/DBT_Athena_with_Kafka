@@ -31,7 +31,7 @@
                           │
                           ▼
     ┌──────────────────────────────────────────────────────────┐
-    │  AWS S3 BUCKET: gaurav-hudi-data                          │
+    │  AWS S3 BUCKET: data-crypto                          │
     │  ├─ Partitioned: crypto_data/year/month/day/             │
     │  ├─ Format: JSON files (1 per batch)                     │
     │  └─ ◄─── MONITORING: S3 object count, ingestion rate     │
@@ -165,14 +165,14 @@ KAFKA CONSUMER + METRICS LOGGING
     │ └─ Publishes to CloudWatch
     │
     ▼
-S3 BUCKET (gaurav-hudi-data/crypto_data/)
+S3 BUCKET (data-crypto/crypto_data/)
     │ Structure: year/month/day/crypto_data_HH-MM-SS.json
     │ Contains: Raw JSON arrays from Kafka
     │
     ▼
 ATHENA EXTERNAL TABLE (crypto_raw_data)
     │ Query: SELECT from S3 using SQL
-    │ Location: s3://gaurav-hudi-data/crypto_data/
+    │ Location: s3://data-crypto/crypto_data/
     │
     ▼
 DBT BRONZE LAYER (crypto_raw)
