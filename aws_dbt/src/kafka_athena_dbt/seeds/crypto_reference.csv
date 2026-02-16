@@ -1,0 +1,11 @@
+symbol,name,category,risk_level
+BTC,Bitcoin,Digital Currency,High
+ETH,Ethereum,Smart Contract Platform,High
+USDT,Tether,Stablecoin,Low
+BNB,Binance Coin,Exchange Token,Medium
+SOL,Solana,Blockchain,High
+ADA,Cardano,Blockchain,Medium
+XRP,Ripple,Payment,Medium
+DOGE,Dogecoin,Meme Coin,High
+DOT,Polkadot,Blockchain,High
+MATIC,Polygon,Layer 2,Medium

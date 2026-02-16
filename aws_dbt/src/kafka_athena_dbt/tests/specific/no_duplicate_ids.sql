@@ -7,4 +7,4 @@
     where date_and_time >= current_date - interval '1' day
     group by {{ column_name }}
     having count(*) > 1
-{% endtest %
+{% endtest %}
