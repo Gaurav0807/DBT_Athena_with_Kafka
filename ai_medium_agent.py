@@ -6,7 +6,7 @@ from langchain_community.llms import HuggingFaceHub
 from langchain_core.output_parsers import StrOutputParser
 
 # 1. Read README
-readme = Path("README.md").read_text()
+readme = readme = Path("./Readme.md").read_text()
 
 # 2. LLM
 llm = HuggingFaceHub(
