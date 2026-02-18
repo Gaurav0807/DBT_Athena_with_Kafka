@@ -69,7 +69,7 @@ def call_hf_inference(repo_id: str, prompt: str, token: str, timeout: int = 300)
 
 
 def main():
-    readme_path = Path("README.md")  # FIX: correct filename
+    readme_path = Path("./README.md")  # FIX: correct filename
     if not readme_path.exists():
         print("README.md not found in repo root", file=sys.stderr)
         sys.exit(1)
