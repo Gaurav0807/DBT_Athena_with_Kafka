@@ -2,6 +2,9 @@ from pathlib import Path
 import os
 import sys
 import requests
+from typing import Any
+
+HF_ROUTER_URL = "https://router.huggingface.co/models"
 
 
 def build_prompt(readme_text: str) -> str:
@@ -23,56 +26,59 @@ README:
 
 
 def call_hf_inference(repo_id: str, prompt: str, token: str, timeout: int = 300) -> str:
-    url = f"https://api-inference.huggingface.co/models/{repo_id}"
-    headers = {"Authorization": f"Bearer {token}"}
-    payload = {"inputs": prompt, "options": {"wait_for_model": True}}
+    url = f"{HF_ROUTER_URL}/{repo_id}"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "inputs": prompt,
+        "options": {"wait_for_model": True},
+        "parameters": {
+            "max_new_tokens": 800,
+            "temperature": 0.5,
+        },
+    }
+
     resp = requests.post(url, json=payload, headers=headers, timeout=timeout)
+
     try:
-        data = resp.json()
+        data: Any = resp.json()
     except ValueError:
         resp.raise_for_status()
 
     if resp.status_code != 200:
-        # try to surface helpful error
         if isinstance(data, dict) and "error" in data:
             raise RuntimeError(f"Hugging Face API error: {data['error']}")
-        raise RuntimeError(f"Hugging Face API returned status {resp.status_code}: {resp.text}")
+        raise RuntimeError(f"Hugging Face API returned {resp.status_code}: {resp.text}")
 
-    # Handle different response shapes
-    if isinstance(data, dict) and "generated_text" in data:
-        return data["generated_text"]
+    # Handle common HF response shapes
     if isinstance(data, list):
-        # e.g. [{'generated_text': '...'}] or [{'generated_text': '...'}, ...]
-        parts = []
+        texts = []
         for item in data:
             if isinstance(item, dict) and "generated_text" in item:
-                parts.append(item["generated_text"])
-            elif isinstance(item, dict) and "generated_texts" in item:
-                parts.extend(item["generated_texts"])
-        return "\n".join(parts)
+                texts.append(item["generated_text"])
+        if texts:
+            return "\n".join(texts)
 
-    # fallback: try raw string
-    if isinstance(data, str):
-        return data
+    if isinstance(data, dict):
+        if "generated_text" in data:
+            return data["generated_text"]
 
-    raise RuntimeError("Unexpected response shape from Hugging Face Inference API")
+    raise RuntimeError(f"Unexpected response shape from Hugging Face: {data}")
 
 
 def main():
-    readme_path = Path("./Readme.md")
+    readme_path = Path("README.md")  # FIX: correct filename
     if not readme_path.exists():
-        print("Readme.md not found in repo root", file=sys.stderr)
+        print("README.md not found in repo root", file=sys.stderr)
         sys.exit(1)
 
-    readme = readme_path.read_text()
+    readme = readme_path.read_text(encoding="utf-8")
 
     hf_token = os.getenv("HUGGINGFACEHUB_API_TOKEN")
     if not hf_token:
-        print(
-            "Environment variable HUGGINGFACEHUB_API_TOKEN is required.\n"
-            "Set it in your environment or as a GitHub Actions secret.",
-            file=sys.stderr,
-        )
+        print("Environment variable HUGGINGFACEHUB_API_TOKEN is required", file=sys.stderr)
         sys.exit(1)
 
     repo_id = os.getenv("HF_MODEL", "meta-llama/Meta-Llama-3-8B-Instruct")
@@ -80,14 +86,14 @@ def main():
     prompt = build_prompt(readme[:6000])
 
     try:
-        print(f"Calling Hugging Face Inference API for model {repo_id}...")
+        print(f"🤖 Calling Hugging Face Router for model {repo_id}...")
         output = call_hf_inference(repo_id, prompt, hf_token)
     except Exception as e:
-        print(f"Error while calling Hugging Face API: {e}", file=sys.stderr)
+        print(f"❌ Error while calling Hugging Face API: {e}", file=sys.stderr)
         sys.exit(1)
 
-    Path("medium.md").write_text(output)
-    print("medium.md generated from README")
+    Path("medium.md").write_text(output, encoding="utf-8")
+    print("✅ medium.md generated from README")
 
 
 if __name__ == "__main__":
