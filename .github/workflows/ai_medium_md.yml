@@ -28,7 +28,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install requests langchain langchain-community huggingface_hub transformers
+          pip install requests langchain langchain-openai langchain-community huggingface_hub transformers
       
       - name: Run AI Agent
         env:
