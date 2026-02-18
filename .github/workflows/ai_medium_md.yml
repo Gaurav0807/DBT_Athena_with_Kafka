@@ -38,8 +38,7 @@ jobs:
       
       - name: Commit medium.md
         run: |
-          git config user.name "Gaurav0807"
-          git config user.email "gauravrawat141999@gmail.com"
-          git add medium.md
+          git add .
+          git status
           git commit -m "chore(ai-agent): generate medium.md" || echo "No changes"
           git push
