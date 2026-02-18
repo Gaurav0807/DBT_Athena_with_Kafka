@@ -1,0 +1,40 @@
+name: AI Agent -> Medium Blog
+
+on:
+  push:
+    branches:
+      - main
+      - ai_code
+
+jobs:
+  generate_blog_post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      
+      - name: Install dependencies
+        run: |
+          pip install langchain langchain-community huggingface_hub transformers
+      
+      - name: Run AI Agent
+        env:
+          HUGGINGFACEHUB_API_TOKEN: ${{ secrets.HUGGINGFACEHUB_API_TOKEN }}
+        run: |
+          python ai_medium_agent.py
+      
+      - name: Commit medium.md
+        run: |
+          git config user.name "Gaurav0807"
+          git config user.email "gauravrawat141999@gmail.com"
+          git add medium.md
+          git commit -m "chore(ai-agent): generate medium.md" || echo "No changes"
+          git push
