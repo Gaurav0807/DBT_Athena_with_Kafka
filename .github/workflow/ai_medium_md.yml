@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - ai_code
 
 jobs:
   generate_blog_post:
