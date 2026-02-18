@@ -7,6 +7,7 @@ on:
 
 jobs:
   generate_blog_post:
+    if: contains(github.event.head_commit.message, 'ai-blog') && github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
 
     steps:
