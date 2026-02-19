@@ -31,13 +31,20 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install requests langchain langchain-openai langchain-community huggingface_hub transformers
+          pip install requests langchain langchain-openai langchain-community huggingface_hub transformers langgraph pydantic
       
-      - name: Run AI Agent
+      - name: Run AI Agent using LangChain
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
           python ai_medium_agent.py
+      
+      - name: Run AI Agent using LangGraph
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          python ai_agent_langgraph.py
+
       
       - name: Commit medium.md
         run: |
