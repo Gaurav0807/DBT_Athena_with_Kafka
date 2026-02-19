@@ -60,7 +60,7 @@ def generate_blog(state: BlogState) -> BlogState:
     """)
 
     chain = prompt | llm | StrOutputParser()
-    state.blog = chain.invoke({"readme": state.readme[:6000000]})
+    state.blog = chain.invoke({"readme": state.readme[:6000]})
     return state
 
 def evaluate_blog(state: BlogState) -> BlogState:
