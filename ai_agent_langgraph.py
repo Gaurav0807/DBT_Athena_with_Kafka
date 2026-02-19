@@ -53,7 +53,7 @@ def generate_blog(state: BlogState) -> BlogState:
     - Conclusion
     - Friendly developer tone
 
-    Please Don't create Image Just architecture and highlevel about everything
+    Please Don't create Image Just architecture and highlevel about everything. Also do proper formatting of the article
 
     README:
     {readme}
@@ -68,7 +68,7 @@ def evaluate_blog(state: BlogState) -> BlogState:
 
     judge_prompt = f"""
     Rate the quality of the following blog from 1 to 10.
-    Only return a single number.
+    Only return a single number. Give number based on proper spacing and proper read able content
 
     Blog:
     {state.blog}
